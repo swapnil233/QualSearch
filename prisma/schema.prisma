@@ -15,11 +15,102 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   email     String   @unique
-  name      String?
-  jobTitle  String?
-  role      Role
+  firstName String
+  lastName  String
+  jobTitle  String
+  role      Role     @default(DESIGN)
+
+  // 1-M with Team
+  team   Team? @relation(fields: [teamId], references: [id])
+  teamId Int?
+
+  // 1-M with Video
+  videos Video[]
+
+  // Identifying inactive users
+  lastLogin DateTime?
 }
 
+model Speaker {
+  id         Int          @id @default(autoincrement())
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+  name       String
+  trnascript Transcript[]
+}
+
+model Team {
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  name      String    @unique
+  members   User[]
+  projects  Project[]
+}
+
+model Project {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  name      String
+
+  // 1-M with Team
+  team   Team @relation(fields: [teamId], references: [id])
+  teamId Int
+}
+
+model Video {
+  id            Int          @id @default(autoincrement())
+  title         String
+  description   String
+  interviewWith String
+  createdAt     DateTime     @default(now())
+  uploadedById  Int
+  videoUrl      String
+  thumbnailUrl  String
+  uploadedBy    User         @relation(fields: [uploadedById], references: [id])
+  transcripts   Transcript[]
+
+  // 1-M with Tag
+  tags Tag[]
+}
+
+model Transcript {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  videoId   Int
+  text      String
+
+  // 1-M with Speaker
+  Speaker   Speaker? @relation(fields: [speakerId], references: [id])
+  speakerId Int?
+
+  // 1-M with Video
+  video Video @relation(fields: [videoId], references: [id])
+
+  // 1-M with Tag
+  tags Tag[]
+}
+
+model Tag {
+  id          Int          @id @default(autoincrement())
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  videos      Video[]
+  transcripts Transcript[]
+  criteria    Criteria[]
+}
+
+model Criteria {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  name      String
+  tags      Tag[]
+}
+
+// For statistics and role based auth purposes down the line
 enum Role {
   CUSTOMER_SUCCESS
   DESIGN

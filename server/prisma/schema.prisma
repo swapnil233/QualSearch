@@ -14,94 +14,112 @@ model User {
   id         Int      @id @default(autoincrement())
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
-  email      String   @unique
   firstName  String
   middleName String?
   lastName   String
+  role       Role?
+  email      String   @unique
   displayPic String?
-  jobTitle   String
-  role       Role     @default(DESIGN)
 
-  // 1-M with Team
-  team   Team? @relation(fields: [teamId], references: [id])
-  teamId Int?
+  // m-n -> User can belong to many teams
+  teams Team[]
 
-  // 1-M with Video
-  videos Video[]
-
-  // Identifying inactive users
-  lastLogin DateTime?
-}
-
-model Speaker {
-  id         Int          @id @default(autoincrement())
-  createdAt  DateTime     @default(now())
-  updatedAt  DateTime     @updatedAt
-  name       String
-  trnascript Transcript[]
+  // 1-n User can create many teams
+  createdTeams Team[] @relation("CreatedTeam")
 }
 
 model Team {
-  id        Int       @id @default(autoincrement())
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  name      String    @unique
-  members   User[]
-  projects  Project[]
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  name        String
+  description String?
+
+  // m-n -> Team can have many users
+  users User[]
+
+  // 1-n -> Team can have many projects
+  projects Project[]
+
+  // 1-n -> Team can be created by 1 user
+  createdBy       User @relation("CreatedTeam", fields: [createdByUserId], references: [id])
+  createdByUserId Int
 }
 
 model Project {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  name      String
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  name        String
+  description String?
 
-  // 1-M with Team
-  team   Team @relation(fields: [teamId], references: [id])
+  // 1-n -> Project can belong to 1 team
+  Team   Team @relation(fields: [teamId], references: [id])
   teamId Int
+
+  // 1-n -> Project can have many videos
+  videos Video[]
 }
 
 model Video {
-  id            Int          @id @default(autoincrement())
-  title         String
-  description   String
-  interviewWith String
-  createdAt     DateTime     @default(now())
-  uploadedById  Int
-  videoUrl      String
-  thumbnailUrl  String
-  uploadedBy    User         @relation(fields: [uploadedById], references: [id])
-  transcripts   Transcript[]
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  name        String
+  description String?
+  videoUrl    String
 
-  // 1-M with Tag
-  tags Tag[]
+  // 1-n -> Video can belong to 1 project
+  Project   Project @relation(fields: [projectId], references: [id])
+  projectId Int
+
+  // 1-1 -> Video can have one transcript
+  transcript Transcript?
+
+  // 1-n -> Video can have many speakers
+  Speaker Speaker[]
+}
+
+model Speaker {
+  id           Int      @id @default(autoincrement())
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  name         String
+  organization String?
+  email        String?
+
+  // 1-n -> Speaker can belong to 1 video
+  Video   Video @relation(fields: [videoId], references: [id])
+  videoId Int
 }
 
 model Transcript {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  videoId   Int
-  text      String
+  id             Int      @id @default(autoincrement())
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  transcriptText String
 
-  // 1-M with Speaker
-  Speaker   Speaker? @relation(fields: [speakerId], references: [id])
-  speakerId Int?
+  // 1-1 -> Transcript can have one video
+  Video   Video @relation(fields: [videoId], references: [id])
+  videoId Int   @unique
 
-  // 1-M with Video
-  video Video @relation(fields: [videoId], references: [id])
-
-  // 1-M with Tag
+  // 1-n -> Transcript can have many tags
   tags Tag[]
 }
 
 model Tag {
-  id          Int          @id @default(autoincrement())
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-  videos      Video[]
-  transcripts Transcript[]
-  criteria    Criteria[]
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  tag       String
+
+  // 1-n -> Tag can belong to one Transcript
+  Transcript   Transcript? @relation(fields: [transcriptId], references: [id])
+  transcriptId Int?
+
+  // 1-n -> Tag can belong to one Criteria
+  Criteria   Criteria @relation(fields: [criteriaId], references: [id])
+  criteriaId Int
 }
 
 model Criteria {
@@ -109,7 +127,9 @@ model Criteria {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   name      String
-  tags      Tag[]
+
+  // 1-n -> Criteria can have many tags
+  tags Tag[]
 }
 
 // For statistics and role based auth purposes down the line

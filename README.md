@@ -8,3 +8,6 @@ The first version of the web app will implement the following features:
 - Each project will contain an user interview (video) and a generated transcript
 - Users can create catagories of tags (e.g., "pain points" or "mental model")
 - The transcript can be tagged by all users within the team
+
+### Database ERD:
+![QuickDBD-Free Diagram](https://user-images.githubusercontent.com/36313876/209417865-b1517edf-1399-430c-a321-d4edcc4ad138.png)

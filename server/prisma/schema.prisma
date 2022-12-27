@@ -11,15 +11,19 @@ datasource db {
 }
 
 model User {
-  id         Int      @id @default(autoincrement())
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  firstName  String
-  middleName String?
-  lastName   String
-  role       Role?
-  email      String   @unique
-  displayPic String?
+  id           Int      @id @default(autoincrement())
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  username     String   @unique
+  passwordSalt String?
+  passwordHash String?
+  googleId     String?  @unique
+  firstName    String?
+  middleName   String?
+  lastName     String?
+  role         Role?
+  email        String   @unique
+  displayPic   String?
 
   // m-n -> User can belong to many teams
   teams Team[]

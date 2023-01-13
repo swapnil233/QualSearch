@@ -21,8 +21,11 @@ app.use(cors());
 const prisma = new PrismaClient()
 const PORT = process.env.PORT || 5000;
 
-// Auth Routes
-app.use('/api/auth', require('./routes/auth.route'));
+// Routers
+const authRouter = require("./application/routes/auth.route");
+
+// Routes middlewares
+app.use("/api/auth", authRouter);
 
 // 404 Page
 app.get("*", (req, res) => {

@@ -11,25 +11,35 @@ datasource db {
 }
 
 model User {
-  id           Int      @id @default(autoincrement())
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-  username     String   @unique
-  passwordSalt String?
-  passwordHash String?
-  googleId     String?  @unique
-  firstName    String?
-  middleName   String?
-  lastName     String?
-  role         Role?
-  email        String   @unique
-  displayPic   String?
+  id         Int      @id @default(autoincrement())
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  username   String   @unique
+  password   String
+  googleId   String?  @unique
+  firstName  String?
+  middleName String?
+  lastName   String?
+  role       Role?
+  email      String   @unique
+  displayPic String?
 
   // m-n -> User can belong to many teams
   teams Team[]
 
   // 1-n User can create many teams
-  createdTeams Team[] @relation("CreatedTeam")
+  createdTeams  Team[]         @relation("CreatedTeam")
+  refreshTokens RefreshToken[]
+}
+
+model RefreshToken {
+  id          String   @id @unique @default(uuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  hashedToken String
+  User        User     @relation(fields: [userId], references: [id])
+  userId      Int
+  revoked     Boolean  @default(false)
 }
 
 model Team {

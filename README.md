@@ -10,4 +10,4 @@ The first version of the web app will implement the following features:
 - The transcript can be tagged by all users within the team
 
 ### Database ERD:
-![QualSearch ERD drawio (1)](https://user-images.githubusercontent.com/36313876/209432573-1e7035ec-d561-4971-bea0-1e08b6e43cf5.png)
+![QualSearch ERD drawio](https://user-images.githubusercontent.com/36313876/212591068-eabdb180-eb4d-401d-bdbb-43c4d0c05396.png)

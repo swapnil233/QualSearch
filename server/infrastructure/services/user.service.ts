@@ -25,6 +25,7 @@ const createUserByEmailAndPassword = async (user: User) => {
             data: user,
         });
     } catch (error) {
+        console.log(error);
         throw new Error("500 Error: Something went wrong while trying to create a new user with 'createUserByEmail' function");
     }
 }
@@ -46,10 +47,32 @@ const updateUserById = (id: number, data: User) => {
     });
 }
 
+const deleteUserById = (id: number) => {
+    const user = findUserById(id);
+    if (!user) {
+        throw new Error("404 Error: User not found");
+    }
+
+    const deleteAllRefreshTokens = db.refreshToken.deleteMany({
+        where: {
+            userId: id,
+        },
+    });
+
+    const deleteUser = db.user.delete({
+        where: {
+            id,
+        },
+    });
+
+    return db.$transaction([deleteAllRefreshTokens, deleteUser]);
+}
+
 module.exports = {
     findUserByEmail,
     findUserByUsername,
     findUserById,
     createUserByEmailAndPassword,
-    updateUserById
+    updateUserById,
+    deleteUserById
 };

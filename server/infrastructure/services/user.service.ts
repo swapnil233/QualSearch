@@ -37,9 +37,19 @@ const findUserById = (id: number) => {
     });
 }
 
+const updateUserById = (id: number, data: User) => {
+    return db.user.update({
+        where: {
+            id,
+        },
+        data,
+    });
+}
+
 module.exports = {
     findUserByEmail,
     findUserByUsername,
     findUserById,
-    createUserByEmailAndPassword
+    createUserByEmailAndPassword,
+    updateUserById
 };

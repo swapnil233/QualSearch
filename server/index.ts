@@ -24,10 +24,12 @@ const PORT = process.env.PORT || 3000;
 // Routers
 const authRouter = require("./application/routes/auth.route");
 const usersRouter = require("./application/routes/users.route");
+const teamsRouter = require("./application/routes/teams.route");
 
 // Routes middlewares
 app.use("/api/auth", authRouter);
 app.use("/api/users", usersRouter);
+app.use("/api/teams", teamsRouter);
 
 // 404 Page
 app.get("*", (req, res) => {

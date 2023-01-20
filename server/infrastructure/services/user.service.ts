@@ -30,7 +30,7 @@ const createUserByEmailAndPassword = async (user: User) => {
     }
 }
 
-const findUserById = (id: number) => {
+const findUserById = (id: string) => {
     return db.user.findUnique({
         where: {
             id,
@@ -38,7 +38,7 @@ const findUserById = (id: number) => {
     });
 }
 
-const updateUserById = (id: number, data: User) => {
+const updateUserById = (id: string, data: User) => {
     return db.user.update({
         where: {
             id,
@@ -47,7 +47,7 @@ const updateUserById = (id: number, data: User) => {
     });
 }
 
-const deleteUserById = (id: number) => {
+const deleteUserById = (id: string) => {
     const user = findUserById(id);
     if (!user) {
         throw new Error("404 Error: User not found");

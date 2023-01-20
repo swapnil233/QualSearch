@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 const db = new PrismaClient();
 
-export const createTeamByUserId = async ({ name, description, createdByUserId }: { name: string, description: string, createdByUserId: number }) => {
+export const createTeamByUserId = async ({ name, description, createdByUserId }: { name: string, description: string, createdByUserId: string }) => {
     try {
         return await db.team.create({
             data: {

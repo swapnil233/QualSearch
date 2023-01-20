@@ -4,14 +4,12 @@ import { IGetUserAuthInfoRequest } from '../../domain/interfaces/IGetUserAuthInf
 
 export const createTeam = async (req: IGetUserAuthInfoRequest, res: Response) => {
     try {
-        const createdByUserId: number = req.payload.userId;
+        const createdByUserId: string = req.payload.userId;
         const { name, description } = req.body;
 
         // Validate request
         if (!name || !description) return res.status(422).json({ message: "Missing name or description" });
-
         if (name.length < 3) return res.status(422).json({ message: "Name is too short, minimum length is 3" });
-
         if (!createdByUserId) return res.status(422).json({ message: "Missing createdByUserId" });
 
         const team = await createTeamByUserId({ name, description, createdByUserId });

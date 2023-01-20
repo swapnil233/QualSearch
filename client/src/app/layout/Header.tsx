@@ -19,13 +19,13 @@ import {
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import {
-  IconNotification,
-  IconCode,
-  IconBook,
-  IconChartPie3,
-  IconFingerprint,
-  IconCoin,
   IconChevronDown,
+  IconUsers,
+  IconMicrophone,
+  Icon3dCubeSphere,
+  IconGrain,
+  IconActivity,
+  IconBuildingSkyscraper,
 } from "@tabler/icons";
 
 const useStyles = createStyles((theme) => ({
@@ -97,36 +97,42 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-const mockdata = [
+const featuresData = [
   {
-    icon: IconCode,
-    title: "Open source",
-    description: "This Pokémon’s cry is very loud and distracting",
+    icon: IconUsers,
+    title: "Collaboration",
+    description:
+      "Create teams and invite your colleagues to join. Get more done together.",
   },
   {
-    icon: IconCoin,
-    title: "Free for everyone",
-    description: "The fluid of Smeargle’s tail secretions changes",
+    icon: IconMicrophone,
+    title: "Analyze Data",
+    description:
+      "QualSearch automatically transcribes your interviews for easy analysis! Quickly find the most important insights.",
   },
   {
-    icon: IconBook,
-    title: "Documentation",
-    description: "Yanma is capable of seeing 360 degrees without",
+    icon: Icon3dCubeSphere,
+    title: "Gather Insights",
+    description:
+      "Speed up your research with advanced transcription and tagging. Promote customer-driven decisions backed by insights and evidence.",
   },
   {
-    icon: IconFingerprint,
-    title: "Security",
-    description: "The shell’s rounded shape and the grooves on its.",
+    icon: IconGrain,
+    title: "Discover Patterns",
+    description:
+      "Group key highlights and tags into relevant themes. Synthesize findings into insights and recommendations for your team.",
   },
   {
-    icon: IconChartPie3,
-    title: "Analytics",
-    description: "This Pokémon uses its flying ability to quickly chase",
+    icon: IconActivity,
+    title: "Inspire Action",
+    description:
+      "Bring the voice of the customer to every product decision. Use traceable, high-impact insights to promote a research culture in your organization.",
   },
   {
-    icon: IconNotification,
-    title: "Notifications",
-    description: "Combusken battles with the intensely hot flames it spews",
+    icon: IconBuildingSkyscraper,
+    title: "Increase Productivity",
+    description:
+      "Increase your team’s research velocity with powerful templates, global tagging taxonomies and access controls.",
   },
 ];
 
@@ -136,7 +142,7 @@ export function HeaderMegaMenu() {
   const [linksOpened, { toggle: toggleLinks }] = useDisclosure(false);
   const { classes, theme } = useStyles();
 
-  const links = mockdata.map((item) => (
+  const links = featuresData.map((item) => (
     <UnstyledButton className={classes.subLink} key={item.title}>
       <Group noWrap align="flex-start">
         <ThemeIcon size={34} variant="default" radius="md">
@@ -165,7 +171,7 @@ export function HeaderMegaMenu() {
             spacing={0}
             className={classes.hiddenMobile}
           >
-            <a href="#" className={classes.link}>
+            <a href="/" className={classes.link}>
               Home
             </a>
             <HoverCard
@@ -192,9 +198,6 @@ export function HeaderMegaMenu() {
               <HoverCard.Dropdown sx={{ overflow: "hidden" }}>
                 <Group position="apart" px="md">
                   <Text weight={500}>Features</Text>
-                  <Anchor href="#" size="xs">
-                    View all
-                  </Anchor>
                 </Group>
 
                 <Divider

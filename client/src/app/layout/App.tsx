@@ -1,11 +1,13 @@
-import React from 'react';
-import './App.css';
+import React from "react";
+import { HeaderMegaMenu } from "./Header";
+import { HeroImageBackground } from "./Hero";
 
 function App() {
   return (
-    <div className="App">
-      <h1>Hello world</h1>
-    </div>
+    <>
+      <HeaderMegaMenu />
+      <HeroImageBackground />
+    </>
   );
 }
 

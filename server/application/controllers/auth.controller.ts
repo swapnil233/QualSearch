@@ -1,7 +1,6 @@
 import { RefreshToken, User } from '@prisma/client';
 import { NextFunction, Request, Response } from 'express';
 import { hashToken } from '../../infrastructure/utils/hashToken.util';
-import { body, validationResult } from 'express-validator';
 const { v4: uuidv4 } = require('uuid');
 const { generateTokens } = require('../../infrastructure/utils/jwt.util');
 const { addRefreshTokenToWhitelist, findRefreshTokenById, deleteRefreshToken, revokeTokens } = require('../../infrastructure/services/auth.service');
@@ -89,7 +88,7 @@ export const refreshToken = async (req: Request, res: Response, next: NextFuncti
     try {
         const { refreshToken }: { refreshToken: string } = req.body;
         if (!refreshToken) {
-            return res.status(400).send("400 error: Missing refresh token");
+            return res.status(401).send("401 error: Unauthorized");
         }
 
         const payload = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);

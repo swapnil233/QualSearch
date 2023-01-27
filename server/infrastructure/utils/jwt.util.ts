@@ -1,6 +1,9 @@
 import { User } from "@prisma/client";
-
 const jwt = require('jsonwebtoken');
+
+if (!process.env.JWT_ACCESS_SECRET || !process.env.JWT_REFRESH_SECRET) {
+    throw new Error('JWT_SECRET and/or JWT_REFRESH_SECRET are not defined in .env file');
+}
 
 const generateAccessToken = (user: User) => {
     return jwt.sign({

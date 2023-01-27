@@ -23,13 +23,24 @@ model User {
   role       Role?
   email      String   @unique
   displayPic String?
+  verified   Boolean? @default(false)
 
   // m-n -> User can belong to many teams
   teams Team[]
 
   // 1-n User can create many teams
-  createdTeams  Team[]         @relation("CreatedTeam")
-  refreshTokens RefreshToken[]
+  createdTeams      Team[]              @relation("CreatedTeam")
+  refreshTokens     RefreshToken[]
+  VerificationToken VerificationToken[]
+}
+
+model VerificationToken {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  hash      String   @unique
+  User      User     @relation(fields: [userId], references: [id])
+  userId    String
 }
 
 model RefreshToken {

@@ -49,10 +49,13 @@ export const registerUsernamePassword = async (req: Request, res: Response, next
         const { accessToken, refreshToken } = generateTokens(user, jti);
         await addRefreshTokenToWhitelist({ jti, refreshToken, userId: user.id });
 
-        return res.json({
-            accessToken,
-            refreshToken
-        });
+        return res.status(201).json({
+            message: "Account registered successfully.",
+            data: {
+                "Access Token": accessToken,
+                "Refresh Token": refreshToken
+            }
+        })
     } catch (error) {
         return res.status(400).send(error);
     }

@@ -41,9 +41,9 @@ export const getAllTeamsByUserId = async (userId: string) => {
     }
 }
 
-export const getTeamById = async ({ teamId }: { teamId: string }) => {
+export const getTeamById = async (teamId: string, userId: string) => {
     try {
-        return await db.team.findUnique({
+        const team = await db.team.findUnique({
             where: {
                 id: teamId
             },
@@ -51,8 +51,90 @@ export const getTeamById = async ({ teamId }: { teamId: string }) => {
                 users: true,
                 createdBy: true
             }
-        })
+        });
+
+        if (!team) throw new Error("Team not found");
+        if (!team.users.some(user => user.id === userId)) {
+            console.log("Unauthorized");
+            throw new Error("Unauthorized");
+        };
+
+        return team;
     } catch (error) {
-        throw new Error("Can't get team by id");
+        throw error;
+    }
+}
+
+export const updateTeamById = async (teamId: string, userId: string, updateData: { name: string, description: string }) => {
+    try {
+        const team = await getTeamById(teamId, userId);
+
+        return await db.team.update({
+            where: {
+                id: teamId
+            },
+            data: {
+                name: updateData.name,
+                description: updateData.description
+            }
+        });
+    } catch (error) {
+        throw new Error("Can't update team");
+    }
+}
+
+export const deleteTeamById = async (teamId: string, userId: string) => {
+    try {
+        await getTeamById(teamId, userId);
+
+        return await db.team.delete({
+            where: {
+                id: teamId
+            }
+        });
+    } catch (error) {
+        throw new Error("Can't delete team");
+    }
+}
+
+export const addTeamMember = async (teamId: string, userId: string, memberId: string) => {
+    try {
+        await getTeamById(teamId, userId);
+
+        return await db.team.update({
+            where: {
+                id: teamId
+            },
+            data: {
+                users: {
+                    connect: {
+                        id: memberId
+                    }
+                }
+            }
+        });
+    } catch (error) {
+        throw new Error("Can't add team member");
+    }
+}
+
+export const removeTeamMember = async (teamId: string, userId: string, memberId: string) => {
+    try {
+        await getTeamById(teamId, userId);
+
+        return await db.team.update({
+            where: {
+                id: teamId
+            },
+            data: {
+                users: {
+                    disconnect: {
+                        id: memberId
+                    }
+                }
+            }
+        });
+    } catch (error) {
+        throw new Error("Can't remove team member");
     }
 }

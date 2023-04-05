@@ -1,29 +1,36 @@
-import React, { useState } from "react";
 import {
   ColorScheme,
   ColorSchemeProvider,
   MantineProvider,
 } from "@mantine/core";
 
-import {
-  AppShell,
-  Navbar,
-  Header,
-  Text,
-  MediaQuery,
-  Burger,
-  ActionIcon,
-} from "@mantine/core";
-import { BrowserRouter as Router, Link, Route, Routes } from "react-router-dom";
-import { IconSun, IconMoonStars } from "@tabler/icons";
-import { UsersTable } from "./components/UsersTable";
-import usersData from "./data/mockData";
+import { AppShell } from "@mantine/core";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Dashboard from "./scenes/dashboard";
-import SidebarLink from "./components/SidebarLink";
-const data = usersData.data;
+import CustomNavbar from "./components/CustomNavbar";
+import CustomHeader from "./components/CustomHeader";
+import { useState } from "react";
+import { IUserProfile } from "./types/IUserProfile";
+import Teams from "./scenes/teams";
+import Profile from "./scenes/profile";
 
 function App() {
   const [colorScheme, setColorScheme] = useState<ColorScheme>("dark");
+  const [userDetails, setUserDetails] = useState<IUserProfile>({
+    id: "",
+    createdAt: "",
+    updatedAt: "",
+    username: "",
+    password: "",
+    googleId: "",
+    firstName: "",
+    middleName: "",
+    lastName: "",
+    role: "",
+    email: "",
+    displayPic: "",
+    verified: false,
+  });
 
   // Toggle color scheme
   const toggleColorScheme = (value?: ColorScheme) => {
@@ -47,62 +54,28 @@ function App() {
           <AppShell
             navbarOffsetBreakpoint="sm"
             asideOffsetBreakpoint="sm"
-            navbar={
-              <Navbar
-                p="md"
-                hiddenBreakpoint="sm"
-                hidden={!opened}
-                width={{ sm: 200, lg: 300 }}
-              >
-                <SidebarLink title="Home" to="/" />
-                <SidebarLink title="Team" to="/team" />
-              </Navbar>
-            }
+            navbar={<CustomNavbar opened={opened} />}
             header={
-              <Header
-                height={{ base: 50, md: 70 }}
-                p="md"
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-              >
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    height: "100%",
-                  }}
-                >
-                  <MediaQuery largerThan="sm" styles={{ display: "none" }}>
-                    <Burger
-                      opened={opened}
-                      onClick={() => setOpened((o) => !o)}
-                      size="sm"
-                      mr="xl"
-                    />
-                  </MediaQuery>
-                  <Text>Application header</Text>
-                </div>
-                <ActionIcon
-                  variant="outline"
-                  color={colorScheme === "dark" ? "yellow" : "blue"}
-                  onClick={() => toggleColorScheme()}
-                  title="Toggle color scheme"
-                >
-                  {colorScheme === "dark" ? (
-                    <IconSun size={18} />
-                  ) : (
-                    <IconMoonStars size={18} />
-                  )}
-                </ActionIcon>
-              </Header>
+              <CustomHeader
+                opened={opened}
+                colorScheme={colorScheme}
+                setOpened={setOpened}
+                toggleColorScheme={toggleColorScheme}
+              />
             }
           >
             <Routes>
-              <Route path="/" element={<Dashboard />} />
-              <Route path="/team" element={<UsersTable data={data} />} />
+              <Route
+                path="/"
+                element={
+                  <Dashboard
+                    userDetails={userDetails}
+                    setUserDetails={setUserDetails}
+                  />
+                }
+              />
+              <Route path="/team" element={<Teams />} />
+              <Route path="/profile" element={<Profile />} />
             </Routes>
           </AppShell>
         </Router>

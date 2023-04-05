@@ -1,11 +1,9 @@
-import React from "react";
 import { Text } from "@mantine/core";
 import { Link } from "react-router-dom";
-
-type SidebarLinkProps = {
+interface SidebarLinkProps {
   to: string;
   title: string;
-};
+}
 
 export default function SidebarLink({ to, title }: SidebarLinkProps) {
   return (

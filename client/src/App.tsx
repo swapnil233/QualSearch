@@ -65,17 +65,17 @@ function App() {
             }
           >
             <Routes>
+              <Route path="/" element={<Dashboard />} />
+              <Route path="/team" element={<Teams />} />
               <Route
-                path="/"
+                path="/profile"
                 element={
-                  <Dashboard
+                  <Profile
                     userDetails={userDetails}
                     setUserDetails={setUserDetails}
                   />
                 }
               />
-              <Route path="/team" element={<Teams />} />
-              <Route path="/profile" element={<Profile />} />
             </Routes>
           </AppShell>
         </Router>

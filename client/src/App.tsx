@@ -13,6 +13,8 @@ import { useState } from "react";
 import { IUserProfile } from "./types/IUserProfile";
 import Teams from "./scenes/teams";
 import Profile from "./scenes/profile";
+import { Login } from "./scenes/login";
+import { Register } from "./scenes/register";
 
 function App() {
   const [colorScheme, setColorScheme] = useState<ColorScheme>("dark");
@@ -76,6 +78,8 @@ function App() {
                   />
                 }
               />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
             </Routes>
           </AppShell>
         </Router>
